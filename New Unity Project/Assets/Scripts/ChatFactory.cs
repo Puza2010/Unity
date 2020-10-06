@@ -7,6 +7,8 @@ using System;
 
 public class ChatFactory : MonoBehaviour
 {
+    List<int> history = new List<int>();
+
     public DialogData dialog;
 
     public GameObject prefab1;
@@ -21,7 +23,11 @@ public class ChatFactory : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if (PlayerPrefs.HasKey("saveString"))
+        {
+            string savedData = PlayerPrefs.GetString("saveString");
+            Debug.Log(savedData);
+        }
         //yield return new WaitUntil(() => !isBotIsWriting);
         InstantiateChatItem(dialog.dialogData[0]);
 
@@ -61,6 +67,7 @@ public class ChatFactory : MonoBehaviour
 
 
             InstantiateChatItem(GetSentenceById(botSentence.idAnswers[0]));
+            history.Add(botSentence.idAnswers[0]);
         }
 
         if (botSentence.idAnswers.Length > 1)
@@ -84,13 +91,17 @@ public class ChatFactory : MonoBehaviour
 
     private void playerChoice(List<GameObject> playerAnswers, int id, Sentence botSentence)
     {
+        // Debug.Log(id); (zawsze wartość 3)
         // JAK TO ZROBIĆ?!
         for (int i = 0; i < playerAnswers.Count; i++)
         {
+            // Debug.Log(i); (0, 1, 2)
             if (i != id)
             {
                 Destroy(playerAnswers[i]);
             }
+
+            history.Add(botSentence.idAnswers[i]);
         }
     }
 
@@ -123,5 +134,17 @@ public class ChatFactory : MonoBehaviour
     void InstantiateChatItem(Sentence botSentence)
     {
         StartCoroutine(InstantiateChatItemCoroutine(botSentence));
+    }
+    private void OnApplicationQuit()
+    {
+        string historyString = "";
+        for (int i = 0; i < history.Count; i++)
+        {
+            historyString += history[i].ToString();
+            historyString += ",";
+        }
+
+        PlayerPrefs.SetString("saveString", historyString);
+        PlayerPrefs.Save();
     }
 }
