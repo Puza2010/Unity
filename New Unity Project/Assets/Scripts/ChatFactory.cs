@@ -63,9 +63,6 @@ public class ChatFactory : MonoBehaviour
         isBotIsWriting = false;
         if (botSentence.idAnswers.Length == 1)
         {
-            //Sentence result = (Sentence)dialog.dialogData.Where<Sentence>(item => item.id == botSentence.idAnswers[0]);
-
-
             InstantiateChatItem(GetSentenceById(botSentence.idAnswers[0]));
             history.Add(botSentence.idAnswers[0]);
         }
@@ -85,7 +82,8 @@ public class ChatFactory : MonoBehaviour
             GameObject playerAnswerButton = Instantiate(playerAnswer, contentTransform);
             answersButtons.Add(playerAnswerButton);
             playerAnswerButton.GetComponentInChildren<Text>().text = GetSentenceById(botSentence.idAnswers[i]).sentence;
-            playerAnswerButton.GetComponentInChildren<Button>().onClick.AddListener(() => playerChoice(answersButtons, i, botSentence));
+            int iPar = i;
+            playerAnswerButton.GetComponentInChildren<Button>().onClick.AddListener(() => playerChoice(answersButtons, iPar, botSentence));
         }
     }
 
@@ -99,9 +97,12 @@ public class ChatFactory : MonoBehaviour
             if (i != id)
             {
                 Destroy(playerAnswers[i]);
+                continue;
             }
 
-            history.Add(botSentence.idAnswers[i]);
+            history.Add(botSentence.idAnswers[id]);
+            InstantiateChatItem(GetSentenceById(botSentence.idAnswers[id]));
+            break;
         }
     }
 

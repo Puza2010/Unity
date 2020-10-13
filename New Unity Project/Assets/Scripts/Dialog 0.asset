@@ -47,7 +47,7 @@ MonoBehaviour:
     waitTime: 0.2
     writingSpeed: 0.2
     sentence: 302 bot sentence
-    idAnswers: 2e010000
+    idAnswers: 38010000
   - id: 311
     waitTime: 0.2
     writingSpeed: 0.2
