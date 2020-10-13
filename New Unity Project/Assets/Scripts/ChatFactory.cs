@@ -27,6 +27,7 @@ public class ChatFactory : MonoBehaviour
         {
             string savedData = PlayerPrefs.GetString("saveString");
             Debug.Log(savedData);
+            LoadGame();
         }
         //yield return new WaitUntil(() => !isBotIsWriting);
         InstantiateChatItem(dialog.dialogData[0]);
@@ -136,6 +137,23 @@ public class ChatFactory : MonoBehaviour
     {
         StartCoroutine(InstantiateChatItemCoroutine(botSentence));
     }
+
+    void LoadGame()
+    {
+        string savedState = PlayerPrefs.GetString("saveString");
+        string[] savedStateArray = savedState.Split(',');
+
+        for (int i = 0; i < savedStateArray.Length; i++)
+        {
+            int answerId = int.Parse(savedStateArray[i]);
+            Sentence answer = GetSentenceById(answerId);
+
+            GameObject chatItem = Instantiate(prefab1, contentTransform);
+            Text textComponent = chatItem.GetComponentInChildren<Text>();
+            textComponent.text += answer.sentence;
+        }
+    }
+
     private void OnApplicationQuit()
     {
         string historyString = "";

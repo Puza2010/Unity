@@ -40,31 +40,31 @@ MonoBehaviour:
     idAnswers: 41010000
   - id: 301
     waitTime: 0.2
-    writingSpeed: 0.2
+    writingSpeed: 0
     sentence: 301 bot sentence
     idAnswers: 2e010000
   - id: 302
     waitTime: 0.2
-    writingSpeed: 0.2
+    writingSpeed: 0
     sentence: 302 bot sentence
-    idAnswers: 38010000
-  - id: 311
+    idAnswers: 2f010000
+  - id: 303
+    waitTime: 0.2
+    writingSpeed: 0
+    sentence: 303 player answer
+    idAnswers: 910100009201000093010000
+  - id: 401
     waitTime: 0.2
     writingSpeed: 0.2
-    sentence: 311 player answer
-    idAnswers: 2e010000
-  - id: 312
+    sentence: 401 player sentence
+    idAnswers: 65000000
+  - id: 402
     waitTime: 0.2
     writingSpeed: 0.2
-    sentence: 312 bot sentence
-    idAnswers: 2e010000
-  - id: 321
+    sentence: 402 player sentence
+    idAnswers: 65000000
+  - id: 403
     waitTime: 0.2
     writingSpeed: 0.2
-    sentence: 321 bot sentence
-    idAnswers: 2e010000
-  - id: 322
-    waitTime: 0.2
-    writingSpeed: 0.2
-    sentence: 322 bot sentence
-    idAnswers: 2e010000
+    sentence: 403 player sentence
+    idAnswers: 65000000
