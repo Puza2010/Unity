@@ -94,15 +94,15 @@ public class ChatFactory : MonoBehaviour
         for (int i = 0; i < playerAnswers.Count; i++)
         {
             // Debug.Log(i); (0, 1, 2)
-            if (i != id)
+            if (i == id)
             {
-                Destroy(playerAnswers[i]);
-                continue;
+                history.Add(botSentence.idAnswers[id]);
+                InstantiateChatItem(GetSentenceById(botSentence.idAnswers[id]));
+                
+                
             }
+            Destroy(playerAnswers[i]);
 
-            history.Add(botSentence.idAnswers[id]);
-            InstantiateChatItem(GetSentenceById(botSentence.idAnswers[id]));
-            break;
         }
     }
 
