@@ -29,17 +29,17 @@ public class ChatFactory : MonoBehaviour
             Debug.Log(savedData);
             LoadGame();
         }
+		else
+		{
+            InstantiateChatItem(dialog.dialogData[0]); // jeżeli nie ma historii znaczy że nowa gra
+        }
+        
+        
         //yield return new WaitUntil(() => !isBotIsWriting);
-        InstantiateChatItem(dialog.dialogData[0]);
-
         //InvokeRepeating("InstantiateChatItem", 1, 3);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
 
-    }
 
     IEnumerator InstantiateChatItemCoroutine(Sentence botSentence)
     {
@@ -90,8 +90,7 @@ public class ChatFactory : MonoBehaviour
 
     private void playerChoice(List<GameObject> playerAnswers, int id, Sentence botSentence)
     {
-        // Debug.Log(id); (zawsze wartość 3)
-        // JAK TO ZROBIĆ?!
+
         for (int i = 0; i < playerAnswers.Count; i++)
         {
             // Debug.Log(i); (0, 1, 2)
@@ -99,8 +98,6 @@ public class ChatFactory : MonoBehaviour
             {
                 history.Add(botSentence.idAnswers[id]);
                 InstantiateChatItem(GetSentenceById(botSentence.idAnswers[id]));
-                
-                
             }
             Destroy(playerAnswers[i]);
 
@@ -114,9 +111,10 @@ public class ChatFactory : MonoBehaviour
             if (dialog.dialogData[i].id == id)
             {
                 return dialog.dialogData[i];
+                
             }
         }
-
+        Debug.LogError($"Nie znalezino [Sentence] dla id:{id}");
         return null;
     }
 
@@ -140,17 +138,41 @@ public class ChatFactory : MonoBehaviour
 
     void LoadGame()
     {
+		if (!PlayerPrefs.HasKey("saveString"))
+		{
+            return;
+		}
         string savedState = PlayerPrefs.GetString("saveString");
-        string[] savedStateArray = savedState.Split(',');
+        string[] separator = { "," };
+        string[] savedStateArray = savedState.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+        Debug.Log(savedStateArray.ToString());
 
         for (int i = 0; i < savedStateArray.Length; i++)
         {
-            int answerId = int.Parse(savedStateArray[i]);
-            Sentence answer = GetSentenceById(answerId);
+            int answerId;
+            bool canParse = int.TryParse(savedStateArray[i], out answerId);
+			if (canParse)
+			{
+                Sentence answer = GetSentenceById(answerId);
 
-            GameObject chatItem = Instantiate(prefab1, contentTransform);
-            Text textComponent = chatItem.GetComponentInChildren<Text>();
-            textComponent.text += answer.sentence;
+                GameObject chatItem = Instantiate(prefab1, contentTransform);
+                Text textComponent = chatItem.GetComponentInChildren<Text>();
+                textComponent.text = answer.sentence;
+                history.Add(answerId);
+
+                // dla ostatniej wypowiedzi bota w historii potrzebne wyprodukowanie odpowiedzi gracza
+                bool isLastEntryInHistory = i == savedStateArray.Length-1;
+                if (isLastEntryInHistory && answer.idAnswers.Length > 1)
+                {
+                    GeneratePlayerAnswers(answer);
+                }
+                else if (isLastEntryInHistory && answer.idAnswers.Length == 1)  // dla ostatniej odpowiedzi komputera z historii uruchamiamy kontynuację
+                {
+                    InstantiateChatItem(GetSentenceById(answer.idAnswers[0]));
+                    history.Add(answer.idAnswers[0]);
+                }
+            }
+            //int answerId = int.Parse(savedStateArray[i]);
         }
     }
 

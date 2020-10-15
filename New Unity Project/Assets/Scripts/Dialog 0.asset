@@ -32,7 +32,7 @@ MonoBehaviour:
     waitTime: 0
     writingSpeed: 0
     sentence: 202 player answer
-    idAnswers: 37010000
+    idAnswers: 2d010000
   - id: 203
     waitTime: 0
     writingSpeed: 0
