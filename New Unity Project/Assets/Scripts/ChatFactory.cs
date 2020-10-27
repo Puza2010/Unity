@@ -39,7 +39,14 @@ public class ChatFactory : MonoBehaviour
         //InvokeRepeating("InstantiateChatItem", 1, 3);
     }
 
-
+    private void Update()
+    {
+        //if (Input.GetKeyDown(KeyCode.Backspace))
+        //{
+        //    PlayerPrefs.DeleteAll();
+        //    Debug.Log("odpalil");
+        //}
+    }
 
     IEnumerator InstantiateChatItemCoroutine(Sentence botSentence)
     {
@@ -176,16 +183,23 @@ public class ChatFactory : MonoBehaviour
         }
     }
 
-    private void OnApplicationQuit()
+    private void OnApplicationPause()
     {
-        string historyString = "";
-        for (int i = 0; i < history.Count; i++)
-        {
-            historyString += history[i].ToString();
-            historyString += ",";
+        if (history.Count != 0) {
+            string historyString = "";
+            for (int i = 0; i < history.Count; i++)
+            {
+                historyString += history[i].ToString();
+                historyString += ",";
+            }
+
+            PlayerPrefs.SetString("saveString", historyString);
+            PlayerPrefs.Save();
+
+            //odpalanie notyfikacji, do TestNotification dodać parametry, które będą definiować notyfikacje
+           
         }
 
-        PlayerPrefs.SetString("saveString", historyString);
-        PlayerPrefs.Save();
+        GetComponent<PushNotifications>().TestNotification("quit");
     }
 }
